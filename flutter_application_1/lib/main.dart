@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'home_page.dart';
+import 'data_provider.dart'; // Importar DataProvider
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => DataProvider()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,7 +22,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Mi Aplicación',
       theme: ThemeData(
-        scaffoldBackgroundColor: Color(0xFF03182B), // Fondo #03182B
+        scaffoldBackgroundColor: const Color(0xFF03182B), // Fondo #03182B
       ),
       home: const HomePage(),
     );

@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'data_provider.dart'; // Importar DataProvider
 
 class RecompensasPage extends StatelessWidget {
   const RecompensasPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var dataProvider = Provider.of<DataProvider>(context);
+    var recompensas = dataProvider.backendData['recompensas'];
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -26,11 +31,11 @@ class RecompensasPage extends StatelessWidget {
                 child: Column(
                   children: [
                     Image.asset(
-                      'assets/images/recompensas_icon.png', // Ajusta la ruta a tu imagen
+                      'assets/images/recompensas_icon.png',
                       width: 100,
                       height: 100,
                     ),
-                    Text(
+                    const Text(
                       'Recompensas',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -38,8 +43,8 @@ class RecompensasPage extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(height: 8.0),
-                    Text(
+                    const SizedBox(height: 8.0),
+                    const Text(
                       'Aquí están las recompensas que has ganado completando los desafíos en Clipp',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -50,40 +55,31 @@ class RecompensasPage extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
               Container(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  color: Color(0xFF1E3A5F), // Tono azul más claro que el fondo
+                  color: const Color(0xFF1E3A5F),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Column(
-                  children: [
-                    RewardDetail(
-                      title: 'Completa 5 viajes en clipp',
-                      description:
-                          'Recibiste un cupón de descuento del 25 % en tu próximo viaje en taxi.',
-                      icon: Icons.check_circle,
-                    ),
-                    SizedBox(height: 16.0),
-                    RewardDetail(
-                      title: 'Utiliza 25USD en taxi en un mes',
-                      description: 'Recibiste un viaje en taxi gratuito.',
-                      icon: Icons.check_circle,
-                    ),
-                    SizedBox(height: 16.0),
-                    RewardDetail(
-                      title: 'Haz 2 viajes en un día',
-                      description:
-                          'Recibiste un descuento del 10% en tu siguiente viaje en esta semana.',
-                      icon: Icons.access_time,
-                      timeLeft: '96H', // Tiempo límite para usar la recompensa
-                    ),
-                  ],
+                  children: recompensas.map<Widget>((recompensa) {
+                    return Column(
+                      children: [
+                        RewardDetail(
+                          title: recompensa['titulo'],
+                          description: recompensa['descripcion'],
+                          icon: recompensa['icono'],
+                          timeLeft: recompensa['tiempoRestante'],
+                        ),
+                        const SizedBox(height: 16.0),
+                      ],
+                    );
+                  }).toList(),
                 ),
               ),
-              SizedBox(height: 16.0),
-              PromoImagesRow(),
+              const SizedBox(height: 16.0),
+              const PromoImagesRow(),
             ],
           ),
         ),
@@ -91,6 +87,7 @@ class RecompensasPage extends StatelessWidget {
     );
   }
 }
+
 class RewardDetail extends StatelessWidget {
   final String title;
   final String description;
@@ -115,26 +112,26 @@ class RewardDetail extends StatelessWidget {
           Row(
             children: [
               Icon(icon, color: Colors.green),
-              SizedBox(width: 8.0),
+              const SizedBox(width: 8.0),
               Text(
                 title,
-                style: TextStyle(color: Colors.white, fontSize: 16.0),
+                style: const TextStyle(color: Colors.white, fontSize: 16.0),
               ),
             ],
           ),
           const SizedBox(height: 8.0),
           Text(
             description,
-            style: TextStyle(color: Colors.white54, fontSize: 14.0),
+            style: const TextStyle(color: Colors.white54, fontSize: 14.0),
           ),
           if (timeLeft != null)
             Row(
               children: [
-                Icon(Icons.access_time, color: Colors.white),
-                SizedBox(width: 4.0),
+                const Icon(Icons.access_time, color: Colors.white),
+                const SizedBox(width: 4.0),
                 Text(
                   timeLeft!,
-                  style: TextStyle(color: Colors.white54, fontSize: 12.0),
+                  style: const TextStyle(color: Colors.white54, fontSize: 12.0),
                 ),
               ],
             ),
@@ -143,6 +140,7 @@ class RewardDetail extends StatelessWidget {
     );
   }
 }
+
 class PromoImagesRow extends StatelessWidget {
   const PromoImagesRow({super.key});
 

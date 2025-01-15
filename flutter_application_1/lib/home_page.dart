@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'desafios_page.dart';
-import 'recompensas_page.dart';
+import 'package:provider/provider.dart';
+import 'desafios_page.dart'; // Importar correctamente
+import 'recompensas_page.dart'; // Importar correctamente
+import 'data_provider.dart'; // Importar DataProvider
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   bool _isMenuVisible = false;
 
   void _toggleMenu() {
@@ -30,6 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var dataProvider = Provider.of<DataProvider>(context);
     return Scaffold(
       body: GestureDetector(
         onTap: () {
@@ -44,46 +47,46 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start, // Alinear elementos en la parte superior
                 children: [
-                  const UserInfoRow(), // Usamos el widget UserInfoRow
+                  UserInfoRow(dataProvider: dataProvider), // Pasar DataProvider al widget
                   const SizedBox(height: 16.0),
-                  const SearchBox(), // Usamos el widget SearchBox
-                  const SizedBox(height: 16.0), // Espacio adicional para separar
-                  const PromoImagesRow(), // Usamos el widget PromoImagesRow
+                  const SearchBox(),
+                  const SizedBox(height: 16.0),
+                  const PromoImagesRow(),
                   const Padding(
                     padding: EdgeInsets.only(top: 16.0),
                     child: Text(
                       'Servicios Clipp',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold, // Texto en negrita
+                        fontWeight: FontWeight.bold,
                         fontSize: 16.0,
-                        color: Colors.white, // Ajusta el color del texto
+                        color: Colors.white,
                       ),
                     ),
                   ),
                   const SizedBox(height: 16.0),
-                  const ColorfulServiceCards(), // Usamos el widget ColorfulServiceCards
+                  const ColorfulServiceCards(),
                   const Padding(
-                    padding: EdgeInsets.only(top: 16.0), // Añadimos un padding superior
+                    padding: EdgeInsets.only(top: 16.0),
                     child: Text(
                       'Wallets y Tarjetas',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold, // Texto en negrita
+                        fontWeight: FontWeight.bold,
                         fontSize: 16.0,
-                        color: Colors.white, // Ajusta el color del texto
+                        color: Colors.white,
                       ),
                     ),
                   ),
                   const SizedBox(height: 16.0),
-                  const WalletsAndCards(), // Usamos el widget WalletsAndCards
+                  const WalletsAndCards(),
                 ],
               ),
             ),
             if (_isMenuVisible)
               Positioned(
-                top: 50, // Ajusta la posición vertical
-                right: 10, // Ajusta la posición horizontal
+                top: 50,
+                right: 10,
                 child: GestureDetector(
-                  onTap: () {}, // Evita que el menú se cierre al hacer clic dentro de él
+                  onTap: () {},
                   child: FloatingMenu(navigateToPage: _navigateToPage),
                 ),
               ),
@@ -102,16 +105,16 @@ class FloatingMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 205,
-      padding: EdgeInsets.all(9.0),
+      width: 240,
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: Color(0xFF2A2A2A), // Mismo color que el cuadro de Saldo total
+        color: const Color(0xFF06233E),
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Recompensas Clipp',
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -119,22 +122,22 @@ class FloatingMenu extends StatelessWidget {
               fontSize: 16.0,
             ),
           ),
-          SizedBox(height: 10.0),
+          const SizedBox(height: 20.0),
           GestureDetector(
-            onTap: () => navigateToPage(DesafiosPage()),
-            child: MenuCard(
+            onTap: () => navigateToPage(const DesafiosPage()),
+            child: const MenuCard(
               icon: Icons.star,
               title: 'Desafíos',
-              color: Colors.white, // Color blanco para el cuadro
+              color: Colors.white,
             ),
           ),
-          SizedBox(height: 10.0),
+          const SizedBox(height: 10.0),
           GestureDetector(
-            onTap: () => navigateToPage(RecompensasPage()),
-            child: MenuCard(
+            onTap: () => navigateToPage(const RecompensasPage()),
+            child: const MenuCard(
               icon: Icons.redeem,
               title: 'Recompensas',
-              color: Colors.white, // Color blanco para el cuadro
+              color: Colors.white,
             ),
           ),
         ],
@@ -142,6 +145,7 @@ class FloatingMenu extends StatelessWidget {
     );
   }
 }
+
 class MenuCard extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -159,13 +163,13 @@ class MenuCard extends StatelessWidget {
     return Container(
       height: 50.0,
       decoration: BoxDecoration(
-        color: color, // Color blanco para el cuadro
+        color: color,
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Center(
         child: ListTile(
           leading: Icon(icon, color: Colors.black),
-          title: Text(title, style: TextStyle(color: Colors.black)),
+          title: Text(title, style: const TextStyle(color: Colors.black)),
         ),
       ),
     );
@@ -173,7 +177,9 @@ class MenuCard extends StatelessWidget {
 }
 
 class UserInfoRow extends StatelessWidget {
-  const UserInfoRow({super.key});
+  final DataProvider dataProvider;
+
+  const UserInfoRow({required this.dataProvider, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -182,7 +188,7 @@ class UserInfoRow extends StatelessWidget {
       children: [
         Column(
           children: [
-            SizedBox(height: 15.0),
+            const SizedBox(height: 15.0),
             Image.asset(
               'assets/images/user.png',
               width: 60.0,
@@ -191,24 +197,24 @@ class UserInfoRow extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(width: 8.0),
+        const SizedBox(width: 8.0),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 25.0),
+            const Padding(
+              padding: EdgeInsets.only(top: 25.0),
               child: Text(
                 'Ubicación actual',
                 style: TextStyle(color: Colors.white54, fontSize: 11.0),
               ),
             ),
             Text(
-              'Bolivia y España, teb...',
-              style: TextStyle(color: Colors.white, fontSize: 14.0),
+              dataProvider.backendData['location'] ?? 'Ubicación desconocida',
+              style: const TextStyle(color: Colors.white, fontSize: 14.0),
             ),
           ],
         ),
-        SizedBox(width: 16.0),
+        const SizedBox(width: 16.0),
         Row(
           children: [
             Padding(
@@ -219,7 +225,7 @@ class UserInfoRow extends StatelessWidget {
                 height: 24.0,
               ),
             ),
-            SizedBox(width: 8.0),
+            const SizedBox(width: 8.0),
             Padding(
               padding: const EdgeInsets.only(top: 30.0),
               child: Image.asset(
@@ -228,13 +234,13 @@ class UserInfoRow extends StatelessWidget {
                 height: 24.0,
               ),
             ),
-            SizedBox(width: 8.0),
+            const SizedBox(width: 8.0),
             Padding(
               padding: const EdgeInsets.only(top: 30.0),
               child: IconButton(
                 icon: Image.asset('assets/images/trophy.png'),
                 onPressed: () {
-                  final parentState = context.findAncestorStateOfType<_HomePageState>();
+                  final parentState = context.findAncestorStateOfType<HomePageState>();
                   if (parentState != null) {
                     parentState._toggleMenu();
                   }
@@ -247,6 +253,7 @@ class UserInfoRow extends StatelessWidget {
     );
   }
 }
+
 class SearchBox extends StatelessWidget {
   const SearchBox({super.key});
 
@@ -255,12 +262,12 @@ class SearchBox extends StatelessWidget {
     return Center(
       child: Container(
         width: MediaQuery.of(context).size.width * 0.9,
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         decoration: BoxDecoration(
-          color: Color(0xFF747475),
+          color: const Color(0xFF747475),
           borderRadius: BorderRadius.circular(10.0),
         ),
-        child: TextField(
+        child: const TextField(
           decoration: InputDecoration(
             hintText: 'A dónde vas?',
             hintStyle: TextStyle(color: Colors.white),
@@ -304,6 +311,16 @@ class PromoImagesRow extends StatelessWidget {
   }
 }
 
+
+
+
+
+
+
+
+
+
+
 class ColorfulServiceCards extends StatelessWidget {
   const ColorfulServiceCards({super.key});
 
@@ -314,41 +331,77 @@ class ColorfulServiceCards extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Alineación uniforme
           children: [
-            ServiceCard(
-              color: Colors.orange,
-              imagePath: 'assets/images/taxi.png',
-              size: 80.0,
+            Expanded(
+              child: ServiceCard(
+                color: const Color(0xFFF9930D), // Color #f9930d
+                imagePath: 'assets/images/taxi.png',
+                size: 80.0,
+                title: 'Taxi', // Texto "Taxi"
+                textColor: Colors.white, // Color del texto blanco
+                textSize: 14.0, // Tamaño del texto para cuadros más grandes
+                height: 130.0, // Altura de cuadros grandes
+              ),
             ),
-            ServiceCard(
-              color: Colors.blue,
-              imagePath: 'assets/images/eventos.png',
-              size: 80.0,
+            Expanded(
+              child: ServiceCard(
+                color: const Color(0xFF65E8FB), // Color #65E8FB
+                imagePath: 'assets/images/eventos.png',
+                size: 80.0,
+                title: 'Eventos', // Texto "Eventos"
+                textColor: Colors.white, // Color del texto blanco
+                textSize: 14.0, // Tamaño del texto para cuadros más grandes
+                height: 130.0, // Altura de cuadros grandes
+              ),
             ),
-            ServiceCard(
-              color: Colors.teal,
-              imagePath: 'assets/images/delivery.png',
-              size: 80.0,
+            Expanded(
+              child: ServiceCard(
+                color: const Color(0xFFAFE4D2), // Color #AFE4D2
+                imagePath: 'assets/images/delivery.png',
+                size: 80.0,
+                title: 'Delivery', // Texto "Delivery"
+                textColor: Colors.white, // Color del texto blanco
+                textSize: 14.0, // Tamaño del texto para cuadros más grandes
+                height: 130.0, // Altura de cuadros grandes
+              ),
             ),
           ],
         ),
-        SizedBox(height: 10.0), // Espacio entre las filas
+        const SizedBox(height: 10.0), // Espacio entre las filas
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Alineación uniforme
           children: [
-            ServiceCard(
-              color: Colors.white,
-              imagePath: 'assets/images/pagos.png',
-              size: 80.0,
+            Expanded(
+              child: ServiceCard(
+                color: Colors.white,
+                imagePath: 'assets/images/pagos.png',
+                size: 60.0,
+                title: 'Pagos y Recargas', // Texto "Pagos y Recargas"
+                textColor: Colors.black, // Color del texto negro
+                textSize: 10.0, // Tamaño del texto para cuadros más pequeños
+                height: 110.0, // Altura de cuadros pequeños
+              ),
             ),
-            ServiceCard(
-              color: Colors.white,
-              imagePath: 'assets/images/farm.png',
-              size: 80.0,
+            Expanded(
+              child: ServiceCard(
+                color: Colors.white,
+                imagePath: 'assets/images/farm.png',
+                size: 60.0,
+                title: 'Farm. Cuxibamba', // Texto "Farm. Cuxibamba"
+                textColor: Colors.black, // Color del texto negro
+                textSize: 10.0, // Tamaño del texto para cuadros más pequeños
+                height: 110.0, // Altura de cuadros pequeños
+              ),
             ),
-            ServiceCard(
-              color: Colors.white,
-              imagePath: 'assets/images/situ.png',
-              size: 80.0,
+            Expanded(
+              child: ServiceCard(
+                color: Colors.white,
+                imagePath: 'assets/images/situ.png',
+                size: 60.0,
+                title: 'Situ SIU', // Texto "Situ SIU"
+                textColor: Colors.black, // Color del texto negro
+                textSize: 10.0, // Tamaño del texto para cuadros más pequeños
+                height: 110.0, // Altura de cuadros pequeños
+              ),
             ),
           ],
         ),
@@ -361,11 +414,19 @@ class ServiceCard extends StatelessWidget {
   final Color color;
   final String imagePath;
   final double size;
+  final String title; // Título para cada cuadro
+  final Color textColor; // Color del texto
+  final double textSize; // Tamaño del texto
+  final double height; // Altura del cuadro
 
   const ServiceCard({
     required this.color,
     required this.imagePath,
     required this.size,
+    required this.title, // Parámetro para el título
+    required this.textColor, // Parámetro para el color del texto
+    this.textSize = 12.0, // Parámetro para el tamaño del texto con valor por defecto
+    this.height = 110.0, // Parámetro para la altura del cuadro con valor por defecto
     super.key,
   });
 
@@ -374,51 +435,79 @@ class ServiceCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(4.0), // Espacio entre los cuadros
       child: Container(
-        width: 90.0, // Ajusta el ancho del cuadro
-        height: 90.0, // Ajusta la altura del cuadro
-        padding: EdgeInsets.all(8.0),
+        height: height, // Ajusta la altura del cuadro
+        padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(8.0),
         ),
-        child: Center(
-          child: Image.asset(
-            imagePath,
-            width: size,
-            height: size,
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Espacio entre el contenido y el texto
+          children: [
+            Image.asset(
+              imagePath,
+              width: size,
+              height: size,
+            ),
+            Text(
+              title,
+              style: TextStyle(color: textColor, fontSize: textSize), // Ajusta el tamaño del texto
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class WalletsAndCards extends StatelessWidget {
   const WalletsAndCards({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var dataProvider = Provider.of<DataProvider>(context);
+    var saldo = dataProvider.backendData['saldo'];
+
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Alineación uniforme
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        WalletCard(),
-        QRCard(),
+        WalletCard(saldo: saldo),
+        const QRCard(),
       ],
     );
   }
 }
 
 class WalletCard extends StatelessWidget {
-  const WalletCard({super.key});
+  final double saldo;
+
+  const WalletCard({required this.saldo, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 160.0,
       height: 80.0,
-      padding: EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: Color(0xFF2A2A2A), // Color más claro que el fondo
+        color: const Color(0xFF06233E),
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: Row(
@@ -428,14 +517,14 @@ class WalletCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 'Saldo total',
                 style: TextStyle(fontSize: 12.0, color: Colors.white54),
               ),
-              SizedBox(height: 5.0),
+              const SizedBox(height: 5.0),
               Text(
-                '45.50 USD',
-                style: TextStyle(
+                '${saldo.toStringAsFixed(2)} USD',
+                style: const TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -447,13 +536,13 @@ class WalletCard extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               Image.asset(
-                'assets/images/circle.png', // Imagen del círculo
-                width: 28.0, // Ajusta el tamaño del círculo
+                'assets/images/circle.png',
+                width: 28.0,
                 height: 28.0,
               ),
               Image.asset(
-                'assets/images/arrow_2.png', // Imagen de la flecha
-                width: 20.0, // Ajusta el tamaño de la flecha
+                'assets/images/arrow_2.png',
+                width: 20.0,
                 height: 20.0,
               ),
             ],
@@ -470,16 +559,16 @@ class QRCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 80.0, // Ajusta el tamaño del cuadro QR
+      width: 80.0,
       height: 80.0,
-      padding: EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-        color: Color(0xFF2A2A2A), // Color más claro que el fondo
+        color: const Color(0xFF06233E),
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: Center(
         child: Image.asset(
-          'assets/images/qr_code.png', // Ajusta la ruta a tu imagen de código QR
+          'assets/images/qr_code.png',
           width: 50.0,
           height: 50.0,
         ),
