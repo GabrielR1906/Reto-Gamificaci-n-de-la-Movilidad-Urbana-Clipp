@@ -59,118 +59,144 @@ class _DesafiosPageState extends State<DesafiosPage>
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Column(
-                      children: [
-                        Image.asset(
-                          'assets/images/desafios_icon.png',
-                          width: 100,
-                          height: 100,
-                        ),
-                        const Text(
-                          'Desafíos',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 8.0),
-                        const Text(
-                          'Al completar los desafíos podrás recibir recompensas dentro de los servicios de Clipp',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF1E3A5F),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Column(
-                      children: desafios.map<Widget>((desafio) {
-                        return Column(
-                          children: [
-                            GestureDetector(
-                              onTap: _showCongratulationsMessage, // Llamar a la función al hacer clic
-                              child: ChallengeDetail(
-                                title: desafio['titulo'],
-                                progress: desafio['progreso'],
-                                timeLeft: desafio['tiempoRestante'],
-                                icon: desafio['icono'],
-                              ),
-                            ),
-                            const SizedBox(height: 16.0),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  const PromoImagesRow(),
-                ],
-              ),
-              if (_showCongratulations)
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF1E3A5F),
-                      borderRadius: BorderRadius.circular(10.0),
-                      border: Border.all(color: Colors.black, width: 1.0),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          'Felicidades',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                            color: Colors.white,
-                          ),
+                  child: Column(
+                    children: [
+                      Image.asset(
+                        'assets/images/desafios_icon.png',
+                        width: 100,
+                        height: 100,
+                      ),
+                      const Text(
+                        'Desafíos',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                          color: Colors.white,
                         ),
-                        const SizedBox(height: 8.0),
-                        const Text(
-                          'Haz conseguido un cupón de descuento en tu próximo viaje Clipp',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
+                      ),
+                      const SizedBox(height: 8.0),
+                      const Text(
+                        'Al completar los desafíos podrás recibir recompensas dentro de los servicios de Clipp',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey,
                         ),
-                        const SizedBox(height: 16.0),
-                        ScaleTransition(
-                          scale: _animationController,
-                          child: Image.asset(
-                            'assets/images/golden_ticket.png',
-                            width: 500,
-                            height: 500,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-            ],
+                const SizedBox(height: 16.0),
+                // Contenedor azul para los desafíos
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF1E3A5F),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: desafios.length,
+                    itemBuilder: (context, index) {
+                      var desafio = desafios[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            int newProgreso = desafio['progreso'] + 10;
+                            dataProvider.updateProgresoDesafio(index, newProgreso);
+                            if (newProgreso >= 100) {
+                              _showCongratulationsMessage();
+                            }
+                          },
+                          child: ChallengeDetail(
+                            title: desafio['titulo'],
+                            progress: desafio['progreso'],
+                            timeLeft: desafio['tiempoRestante'],
+                            icon: desafio['icono'],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                const PromoImagesRow(), // Asegúrate de agregar esto para mostrar las promociones
+              ],
+            ),
           ),
-        ),
+          if (_showCongratulations)
+            Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1E3A5F),
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(color: Colors.black, width: 1.0),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'Felicidades',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 8.0),
+                    const Text(
+                      'Haz conseguido una nueva recompensa',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
+                    ScaleTransition(
+                      scale: _animationController,
+                      child: Image.asset(
+                        'assets/images/golden_ticket.png',
+                        width: 200, // Aumenta el tamaño de la imagen del ticket
+                        height: 200, // Aumenta el tamaño de la imagen del ticket
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          // Botón oculto para incrementar el progreso del primer desafío al 100%
+          Positioned(
+            bottom: 16.0,
+            right: 16.0,
+            child: GestureDetector(
+              onLongPress: () {
+                dataProvider.updateProgresoDesafio(0, 100); // Completar el primer desafío al 100%
+                _showCongratulationsMessage();
+              },
+              child: Container(
+                width: 50.0,
+                height: 50.0,
+                decoration: BoxDecoration(
+                  color: Colors.transparent, // Hacer el botón transparente
+                  borderRadius: BorderRadius.circular(25.0),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

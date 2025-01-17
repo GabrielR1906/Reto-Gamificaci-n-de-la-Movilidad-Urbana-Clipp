@@ -57,26 +57,37 @@ class RecompensasPage extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
               Container(
+                width: double.infinity, // Abarcar todo el ancho
                 padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   color: const Color(0xFF1E3A5F),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
-                child: Column(
-                  children: recompensas.map<Widget>((recompensa) {
-                    return Column(
-                      children: [
-                        RewardDetail(
-                          title: recompensa['titulo'],
-                          description: recompensa['descripcion'],
-                          icon: recompensa['icono'],
-                          timeLeft: recompensa['tiempoRestante'],
+                child: recompensas.isEmpty
+                    ? const Center(
+                        child: Text(
+                          'Aún no obtienes ninguna recompensa. Completa un desafío para recibir una gran recompensa.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                          ),
                         ),
-                        const SizedBox(height: 16.0),
-                      ],
-                    );
-                  }).toList(),
-                ),
+                      )
+                    : Column(
+                        children: recompensas.map<Widget>((recompensa) {
+                          return Column(
+                            children: [
+                              RewardDetail(
+                                title: recompensa['titulo'],
+                                description: recompensa['descripcion'],
+                                icon: recompensa['icono'],
+                              ),
+                              const SizedBox(height: 16.0),
+                            ],
+                          );
+                        }).toList(),
+                      ),
               ),
               const SizedBox(height: 16.0),
               const PromoImagesRow(),
@@ -92,13 +103,11 @@ class RewardDetail extends StatelessWidget {
   final String title;
   final String description;
   final IconData icon;
-  final String? timeLeft; // Campo opcional para el tiempo restante
 
   const RewardDetail({
     required this.title,
     required this.description,
     required this.icon,
-    this.timeLeft,
     super.key,
   });
 
@@ -124,17 +133,6 @@ class RewardDetail extends StatelessWidget {
             description,
             style: const TextStyle(color: Colors.white54, fontSize: 14.0),
           ),
-          if (timeLeft != null)
-            Row(
-              children: [
-                const Icon(Icons.access_time, color: Colors.white),
-                const SizedBox(width: 4.0),
-                Text(
-                  timeLeft!,
-                  style: const TextStyle(color: Colors.white54, fontSize: 12.0),
-                ),
-              ],
-            ),
         ],
       ),
     );
