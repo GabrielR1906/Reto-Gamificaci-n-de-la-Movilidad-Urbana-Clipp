@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'data_provider.dart'; // Importar DataProvider
+import 'data_provider.dart';
 
 class RecompensasPage extends StatelessWidget {
   const RecompensasPage({super.key});
@@ -21,78 +21,111 @@ class RecompensasPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Column(
-                  children: [
-                    Image.asset(
-                      'assets/images/recompensas_icon.png',
-                      width: 100,
-                      height: 100,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Column(
+                children: [
+                  Image.asset(
+                    'assets/images/recompensas_icon.png',
+                    width: 100,
+                    height: 100,
+                  ),
+                  const Text(
+                    'Recompensas',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                      color: Colors.white,
                     ),
-                    const Text(
-                      'Recompensas',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
-                        color: Colors.white,
-                      ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  const Text(
+                    'Aquí están las recompensas que has ganado completando los desafíos en Clipp',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
                     ),
-                    const SizedBox(height: 8.0),
-                    const Text(
-                      'Aquí están las recompensas que has ganado completando los desafíos en Clipp',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16.0),
-              Container(
-                width: double.infinity, // Abarcar todo el ancho
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF1E3A5F),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: recompensas.isEmpty
-                    ? const Center(
-                        child: Text(
-                          'Aún no obtienes ninguna recompensa. Completa un desafío para recibir una gran recompensa.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                          ),
+            ),
+            const SizedBox(height: 16.0),
+            Container(
+              height: 300.0, // Establecer una altura fija para el contenedor
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E3A5F),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: recompensas.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'Aún no obtienes ninguna recompensa. Completa un desafío para recibir una gran recompensa.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.0,
                         ),
-                      )
-                    : Column(
-                        children: recompensas.map<Widget>((recompensa) {
-                          return Column(
-                            children: [
-                              RewardDetail(
-                                title: recompensa['titulo'],
-                                description: recompensa['descripcion'],
-                                icon: recompensa['icono'],
-                              ),
-                              const SizedBox(height: 16.0),
-                            ],
-                          );
-                        }).toList(),
                       ),
-              ),
-              const SizedBox(height: 16.0),
-              const PromoImagesRow(),
-            ],
-          ),
+                    )
+                  : ListView.builder(
+                      itemCount: recompensas.length,
+                      itemBuilder: (context, index) {
+                        var recompensa = recompensas[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: GestureDetector(
+                            onTap: () {
+                              if (recompensa['titulo'] == 'Entrada a concierto') {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      backgroundColor: const Color(0xFF87CEEB), // Azul claro
+                                      title: Text(recompensa['titulo']),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text('Has ganado una entrada para el concierto de Clipp! Aquí está tu código QR que se puede usar como entrada al evento:'),
+                                          const SizedBox(height: 16.0),
+                                          Image.asset(
+                                            'assets/images/qrclipp.png',
+                                            width: 200.0,
+                                            height: 200.0,
+                                          ),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('Cerrar'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                            child: RewardDetail(
+                              title: recompensa['titulo'],
+                              description: recompensa['descripcion'],
+                              icon: recompensa['icono'],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+            const SizedBox(height: 16.0),
+            const PromoImagesRow(), // Cuadros promocionales en la parte inferior
+          ],
         ),
       ),
     );

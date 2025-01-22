@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'desafios_page.dart'; // Importar correctamente
-import 'recompensas_page.dart'; // Importar correctamente
-import 'data_provider.dart'; // Importar DataProvider
+import 'desafios_page.dart';
+import 'recompensas_page.dart';
+import 'data_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

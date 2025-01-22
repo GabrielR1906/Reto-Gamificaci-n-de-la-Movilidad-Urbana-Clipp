@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'data_provider.dart'; // Importar DataProvider
+import 'data_provider.dart';
 
 class DesafiosPage extends StatefulWidget {
   const DesafiosPage({super.key});
@@ -41,6 +41,20 @@ class _DesafiosPageState extends State<DesafiosPage>
         _showCongratulations = false;
       });
     });
+  }
+
+  String _calculateTimeLeft(String fechaFin) {
+    final endDate = DateTime.parse(fechaFin);
+    final now = DateTime.now();
+    final difference = endDate.difference(now);
+
+    if (difference.inDays > 0) {
+      return '${difference.inDays}D ${difference.inHours % 24}H';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours}H';
+    } else {
+      return 'Expirado';
+    }
   }
 
   @override
@@ -97,14 +111,13 @@ class _DesafiosPageState extends State<DesafiosPage>
                 const SizedBox(height: 16.0),
                 // Contenedor azul para los desafíos
                 Container(
+                  height: 300.0, // Establecer una altura fija para el contenedor
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
                     color: const Color(0xFF1E3A5F),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: desafios.length,
                     itemBuilder: (context, index) {
                       var desafio = desafios[index];
@@ -121,7 +134,7 @@ class _DesafiosPageState extends State<DesafiosPage>
                           child: ChallengeDetail(
                             title: desafio['titulo'],
                             progress: desafio['progreso'],
-                            timeLeft: desafio['tiempoRestante'],
+                            timeLeft: _calculateTimeLeft(desafio['fechaFin']),
                             icon: desafio['icono'],
                           ),
                         ),
@@ -130,7 +143,7 @@ class _DesafiosPageState extends State<DesafiosPage>
                   ),
                 ),
                 const SizedBox(height: 16.0),
-                const PromoImagesRow(), // Asegúrate de agregar esto para mostrar las promociones
+                const PromoImagesRow(), // Cuadros promocionales en la parte inferior
               ],
             ),
           ),

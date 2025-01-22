@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'home_page.dart';
-import 'data_provider.dart'; // Importar DataProvider
+import 'data_provider.dart';
 
 void main() {
   runApp(
